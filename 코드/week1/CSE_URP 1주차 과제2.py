@@ -342,6 +342,11 @@ plt.show()
 
 print(np.log(h129), e(error129))
 
+from scipy.stats import linregress
+
+print(f'order of accuracy: {linregress(log_h, error).slope}')
+# 결과: order of accuracy: 1.7527
+
 # Δx와 ∣∣e∣∣에 로그를 취해 만들어진 함수의 기울기가
 # 2와 유사한 것을 확인하였다.
 # 이를 통해 오차가 Δx^2에 비례하여 감소함을 알 수 있다.
