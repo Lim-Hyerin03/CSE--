@@ -47,6 +47,7 @@ def exact_fff(x):
 def endpoints(x):
     x[0]=fffr(0)
     x[-1]=fffl(8)
+    return x
 
 fff_xlist=[fff(x) for x in xlist]
 endpoints(fff_xlist)
@@ -54,7 +55,7 @@ endpoints(fff_xlist)
 plt.plot(xor, exact_fff(xor), 'k', label="exact solution")
 plt.plot(xlist, fff_xlist, 'c', label='Second-order central difference scheme')
 plt.legend(loc='lower center')
-plt.title("Second-order central difference scheme")
+plt.title("Second-order central difference scheme (N=33)")
 
 plt.show()
 
@@ -73,7 +74,7 @@ xlist65=np.linspace(0,8,N65)
 fff_N65=[fff(x) for x in xlist65]
 endpoints(fff_N65)
 print(f'N=65, x=8에서의 함숫값: {fff_N65[-1]}')
-print(exact_fff(8))
+print(f'x=8에서의 exact solution: {exact_fff(8)}')
 
 N129=129
 h=8/(N129-1)
@@ -91,23 +92,25 @@ plt.plot(xor, exact_fff(xor), 'k', label="exact solution")
 plt.legend(loc='lower center')
 plt.title("Second-order central difference scheme")
 plt.show()
-# N=65인 경우 x=8인 지점에서 함수값이 302로 튀는 것을 확인하였다. exact solution의 해는 -195이다.
+# N=65인 경우 x=8인 지점에서 함숫값이 302로 튀는 것을 확인하였다.
+# exact solution의 해는 -195로 매우 큰 차이를 보인다.
 # 이 오차가 아래의 오차 검증에도 큰 영향을 미쳐 오차 계산 시 이 점을 제외하고 진행하였다.
-
 
 y_f=[np.sin((4-x)*(4+x)) for x in xlist65]
 plt.plot(xlist65, y_f, c='b', label='sin((4-x)*(4+x))')
 plt.scatter(xlist65, y_f, c='m', label='sin((4-x)*(4+x))')
 plt.title("N=65일 때 f(x) 위에서 선택되는 점들")
 plt.show()
-# f(x)에 N=65인 경우 골라지는 점들을 찍어 확인해 보아도 원인을 모르겠다. 대체 왜 8에서 튀는 걸까.
+# f(x)에 N=65인 경우 골라지는 점들을 찍어 확인해 보았다.
 
  
 error33=[(exact_fff(xlist33[i])-fff_N33[i])**2 for i in range(33)]
 # x=8일 때 값이 튀는 것을 보정하기 위하여 range(65)가 아닌 range(64)로 진행하였다.
 error65=[(exact_fff(xlist65[i])-fff_N65[i])**2 for i in range(64)]
 error129=[(exact_fff(xlist129[i])-fff_N129[i])**2 for i in range(129)]
-error=[np.log10(math.sqrt(sum(error33)*8/(N33-1))), np.log10(math.sqrt(sum(error65)*8/(N65-1))), np.log10(math.sqrt(sum(error129)*8/(N129-1)))]
+error=[np.log10(math.sqrt(sum(error33)*8/(N33-1))), 
+       np.log10(math.sqrt(sum(error65)*8/(N65-1))), 
+       np.log10(math.sqrt(sum(error129)*8/(N129-1)))]
 log_h=[np.log10(8/(N33-1)), np.log10(8/(N65-1)), np.log10(8/(N129-1))]
 
 
@@ -126,6 +129,29 @@ from scipy.stats import linregress
 print(f'order of accuracy: {linregress(log_h, error).slope}')
 # order of accuracy: 1.6388
 
-# Δx와 ∣∣e∣∣에 로그를 취해 만들어진 함수의 기울기가
-# 2와 유사한 것을 확인하였다.
+# Δx와 ∣∣e∣∣에 로그를 취해 만들어진 함수의 기울기가 2와 충분히 유사하지 않아
+# 전진 차분, 후진 차분으로 만든 부분을 빼고 다시 error을 살펴보았다.
+
+error33=[(exact_fff(xlist33[i+1])-fff_N33[i+1])**2 for i in range(31)]
+error65=[(exact_fff(xlist65[i+1])-fff_N65[i+1])**2 for i in range(63)]
+error129=[(exact_fff(xlist129[i+1])-fff_N129[i+1])**2 for i in range(127)]
+error=[np.log10(math.sqrt(sum(error33)*8/(N33-1))), 
+       np.log10(math.sqrt(sum(error65)*8/(N65-1))), 
+       np.log10(math.sqrt(sum(error129)*8/(N129-1)))]
+
+plt.plot(log_h, error, 'c', label='정확도')
+plt.text(log_h[0], error[0], 'N=33', fontsize=10, ha='center', va='top')
+plt.text(log_h[1], error[1], 'N=65', fontsize=10, ha='center', va='top')
+plt.text(log_h[2], error[2], 'N=129', fontsize=10, ha='center', va='top')
+plt.title("Second-order central difference scheme의 정확도 (양 끝 값 제외)")
+plt.xlabel('$\log(\Delta x)$')
+plt.ylabel('$\log(\Vert e \Vert)$')
+plt.show()
+
+from scipy.stats import linregress
+
+print(f'order of accuracy: {linregress(log_h, error).slope}')
+# order of accuracy: 1.7441
+
+# Δx와 ∣∣e∣∣에 로그를 취해 만들어진 함수의 기울기가 2와 유사한 것을 확인하였다.
 # 이를 통해 오차가 Δx^2에 비례하여 감소함을 알 수 있다.
