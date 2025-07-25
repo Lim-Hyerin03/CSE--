@@ -1,3 +1,7 @@
+# %%
+import numpy as np
+import matplotlib.pyplot as plt
+
 ### 2
 
 ###1-1
@@ -20,15 +24,11 @@ def p(x):
         pp+=ppp*ylist[n]
     return pp
 
-import numpy as np
-
 y2list=[p(x) for x in xlist]
 
 xor=np.linspace(-1,1,400)
 yor=[f(x) for x in xor]
 yor2=[p(x) for x in xor]
-
-import matplotlib.pyplot as plt
 
 plt.plot(xor, yor, 'k', label='f(x)')
 plt.plot(xlist, ylist, 'c', label='data points', linestyle='None', marker='o')
@@ -39,11 +39,13 @@ plt.show()
 
 
 
+# %%
+import numpy as np
+import matplotlib.pyplot as plt
+
 ###1-2
 def f(x):
     return 1/(1+16*x**2)
-
-import numpy as np
 
 N=10
 xlist=[np.cos((2*i+1)*np.pi/(2*N+2)) for i in range(N+1)]
@@ -60,14 +62,11 @@ def p(x):
         ll+=lll*ylist[n]
     return ll
 
-
 y2list=[p(x) for x in xlist]
 
 xor=np.linspace(-1,1,400)
 yor=[f(x) for x in xor]
 yor2=[p(x) for x in xor]
-
-import matplotlib.pyplot as plt
 
 plt.plot(xor, yor, 'k', label='f(x)')
 plt.plot(xlist, ylist, 'c', label='data points', linestyle='None', marker='o')
@@ -77,14 +76,14 @@ plt.title("Lagrange interpolating polynomial p(x) for f(x)=1/(1+16x^2) (C N)")
 plt.show()
 
 
+# %%
+import numpy as np
+import matplotlib.pyplot as plt
 
 ###1-3
 # Chebyshev nodes를 사용하였을 때, Uniform nodes를 사용하였을 때보다
 # 더 f(x)에 유사한 양상을 보였다.
 # 이 이유를 보간 오차 계수를 이용해 알아보았다.
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Uniform nodes의 경우
 h=0.2
@@ -111,8 +110,6 @@ def g2(x):
 xor=np.linspace(-1,1,400)
 yor=[g1(x) for x in xor]
 yor2=[g2(x) for x in xor]
-y1list=[g1(x) for x in x1list]
-y2list=[g2(x) for x in x2list]
 
 plt.plot(xor, yor, 'm', label='Uniform Nodes')
 plt.plot(xor, yor2, 'c', label='Chebyshev Nodes')
@@ -128,12 +125,14 @@ plt.show()
 # 더 적합함을 알 수 있다.
 
 
-###1-4
-# Uniform Nodes
+
+# %%
 import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
+###1-4
+# Uniform Nodes
 def f(x):
     return 1/(1+16*x**2)
 
@@ -170,8 +169,7 @@ plt.legend(loc='lower center')
 plt.title("Cubic spline interpolation (C N)")
 plt.show()
 
-# 이렇게 하는 게 아닌 것 같음. 진짜 8개씩 조건 만들어서 다 구해나가라는 것 같은데
-# 일단 그렇게 할 자신이 없으니 다음 문제부터 풀자
+# %%
 
 
 ###1-5
@@ -211,6 +209,11 @@ Error_CS=math.sqrt(sum(error_CS)/len(xor))
 print(f"Cubic spline method를 이용한 경우 RMSE Error은 {Error_CS}입니다.")
 
 # 평균 제곱근 오차를 구한 결과 각각 0.03492, 0.01389의 Error을 구할 수 있었다.
+
+# %%
+
+### 첫 주에 범위를 잘못 알고 HW#2를 전부 풀어서 일단 전부 제출하고
+### 두 번째 주에 보강해서 2주차 파일로 추가 제출하였습니다.
 
 ###2
 
