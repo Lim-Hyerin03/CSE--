@@ -1,5 +1,0 @@
-파일에 오타가 있었습니다.
-
-파일 맨 밑에서 3번째 줄
-Order of accuracy: 1.6388 이 아닌
-Order of accuracy: 1.7441 입니다.

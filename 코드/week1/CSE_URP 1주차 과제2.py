@@ -128,10 +128,11 @@ plt.show()
 
 # %%
 import numpy as np
-from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
 ###1-4
+from scipy.interpolate import CubicSpline
+
 # Uniform Nodes
 def f(x):
     return 1/(1+16*x**2)
@@ -144,7 +145,7 @@ y1list=[f(x) for x in x1list]
 
 xor=np.linspace(-1,1,400)
 
-cs1=CubicSpline(x1list, y1list)
+cs1=CubicSpline(x1list, y1list, bc_type='natural')
 plt.plot(x1list, y1list, 'c', label='data points', linestyle='None', marker='o')
 plt.plot(xor, cs1(xor), label='Cubic spline interpolation')
 plt.legend(loc='lower center')
@@ -162,7 +163,7 @@ y2list=[f(x) for x in x2list]
 
 xor=np.linspace(-1,1,400)
 
-cs2=CubicSpline(x2list, y2list)
+cs2=CubicSpline(x2list, y2list, bc_type='natural')
 plt.plot(x2list, y2list, 'c', label='data points', linestyle='None', marker='o')
 plt.plot(xor, cs2(xor), label='Cubic spline interpolation')
 plt.legend(loc='lower center')
@@ -199,14 +200,14 @@ def p(x):
 
 error_LI=[(f(x)-p(x))**2 for x in xor]
 Error_LI=math.sqrt(sum(error_LI)/len(xor))
-print(f"Lagrangian interpolation를 이용한 경우 RMSE Error은 {Error_LI}입니다.")
+print(f"Lagrangian interpolation를 이용한 경우 RMSE Error은 {Error_LI:.4f}입니다.")
 
 # Chebyshev node, Cubic spline method
-cs=CubicSpline(xlist, ylist)
+cs=CubicSpline(xlist, ylist, bc_type='natural')
 
 error_CS=[(f(x)-cs(x))**2 for x in xor]
 Error_CS=math.sqrt(sum(error_CS)/len(xor))
-print(f"Cubic spline method를 이용한 경우 RMSE Error은 {Error_CS}입니다.")
+print(f"Cubic spline method를 이용한 경우 RMSE Error은 {Error_CS:.4f}입니다.")
 
 # 평균 제곱근 오차를 구한 결과 각각 0.03492, 0.01389의 Error을 구할 수 있었다.
 
